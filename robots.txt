@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lahrech-player.example.com/sitemap.xml
+Sitemap: https://lahrech381-ui.github.io/lahrech_islamic_audio/index.html/sitemap.xml
