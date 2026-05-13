@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة الصوتيات الإسلامية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+        }
+        .audio-player-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #e5e7eb;
+        }
+        .result-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="pb-32">
+
+    <!-- Header / Search Bar -->
+    <header class="sticky-header bg-emerald-700 text-white shadow-lg p-4">
+        <div class="container mx-auto flex flex-col gap-4">
+            <!-- Top Row: Title and primary actions -->
+            <div class="flex items-center justify-between">
+                <h4 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-mosque"></i>
+                    <span class="truncate">لحرش للصوتيات الإسلامية</span>
+                </h4>
+                <div class="flex items-center gap-2">
+                    <a href="guide.html" class="bg-emerald-600 text-white p-2 rounded-full hover:bg-emerald-500 transition shadow-md flex items-center justify-center w-10 h-10 md:w-12 md:h-12" title="دليل المستخدم">
+                        <i class="fas fa-question-circle text-sm md:text-base"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Middle Row: Search Bar -->
+            <div class="relative w-full">
+                <input type="text" id="searchInput" 
+                    class="w-full p-3 pr-12 pl-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-400" 
+                    placeholder="ابحث عن تلاوات، أحاديث، دروس إسلامية...">
+                <button id="searchBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-emerald-600 text-white p-2 rounded-full hover:bg-emerald-500 transition">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Bottom Row: Quick Action Buttons -->
+            <div class="flex items-center justify-center gap-3 md:justify-end">
+                <button id="favsBtn" class="bg-white text-emerald-700 p-2 rounded-full hover:bg-emerald-50 transition shadow-md flex items-center justify-center w-10 h-10 md:w-12 md:h-12" title="المفضلة">
+                    <i class="fas fa-heart text-red-500 text-sm md:text-base"></i>
+                </button>
+                <button id="keywordsQuickBtn" class="bg-emerald-100 text-emerald-700 p-2 rounded-full hover:bg-emerald-200 transition shadow-md flex items-center justify-center w-10 h-10 md:w-12 md:h-12" title="الكلمات المقترحة">
+                    <i class="fas fa-lightbulb text-sm md:text-base"></i>
+                </button>
+                <a href="keywords.html" class="bg-emerald-800 text-white p-2 rounded-full hover:bg-emerald-900 transition shadow-md flex items-center justify-center w-10 h-10 md:w-12 md:h-12" title="إدارة الكلمات المفتاحية">
+                    <i class="fas fa-tags text-sm md:text-base"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Keywords Quick Selector Modal -->
+    <div id="keywordsModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="bg-emerald-700 text-white p-4 flex items-center justify-between">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-lightbulb"></i>
+                    الكلمات المفتاحية المقترحة
+                </h3>
+                <button id="closeKeywordsBtn" class="text-white hover:text-emerald-200 transition text-2xl">&times;</button>
+            </div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
+                <!-- Authors Column -->
+                <div>
+                    <h4 class="text-emerald-700 font-bold mb-3 flex items-center gap-2 border-b pb-2">
+                        <i class="fas fa-user-tie"></i> المؤلفون
+                    </h4>
+                    <div id="modalAuthorsList" class="flex flex-wrap gap-2">
+                        <!-- Author tags will be injected here -->
+                    </div>
+                </div>
+                <!-- Titles Column -->
+                <div>
+                    <h4 class="text-emerald-700 font-bold mb-3 flex items-center gap-2 border-b pb-2">
+                        <i class="fas fa-book-open"></i> العناوين
+                    </h4>
+                    <div id="modalTitlesList" class="flex flex-wrap gap-2">
+                        <!-- Title tags will be injected here -->
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-4 text-center text-xs text-gray-500 border-t">
+                اضغط على أي كلمة لإدراجها في مربع البحث
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 mt-6">
+        <!-- Welcome Banner -->
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-emerald-100 mb-2 text-center">
+            
+            <h5 class="text-2xl font-bold text-gray-800 mb-2">مرحباً بك في مكتبة الصوتيات الإسلامية</h5>
+            <p class="text-gray-600">بوابتك للوصول السريع والمباشر إلى آلاف المقاطع الصوتية الإسلامية من أرشيف الإنترنت. ابحث، استمع، واحفظ مقاطعك المفضلة في مكان واحد.</p>
+        </div>
+
+
+</div>
+        <!-- Search Stats -->
+        <div id="searchStats" class="text-center mb-2 text-gray-600 font-medium hidden">
+            تم العثور على <span id="resultsCount" class="text-emerald-700 font-bold">0</span> نتيجة
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Results will be injected here -->
+            <div class="col-span-full text-center text-gray-500 py-20">
+                <i class="fas fa-search text-5xl mb-4 block"></i>
+                <p class="text-xl">ابدأ البحث عن المحتوى الإسلامي (MP3)</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8 hidden">
+            <button id="prevPage" class="bg-white border border-emerald-600 text-emerald-600 px-4 py-2 rounded hover:bg-emerald-50 transition disabled:opacity-50">
+                السابق
+            </button>
+            <span id="pageIndicator" class="text-gray-700 font-semibold">صفحة 1</span>
+            <button id="nextPage" class="bg-white border border-emerald-600 text-emerald-600 px-4 py-2 rounded hover:bg-emerald-50 transition disabled:opacity-50">
+                التالي
+            </button>
+        </div>
+    </main>
+
+    <!-- Fixed Audio Player -->
+    <footer class="sticky-footer audio-player-container p-4 shadow-2xl">
+        <div class="container mx-auto flex flex-col md:flex-row items-center gap-4">
+            <!-- Track Info -->
+            <div class="flex items-center gap-4 w-full md:w-1/3">
+                <div id="playerIcon" class="bg-emerald-100 text-emerald-700 p-3 rounded-full hidden md:block">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <p id="currentTitle" class="font-bold text-gray-800 truncate">لا يوجد ملف صوتي حالياً</p>
+                    <p id="currentArtist" class="text-sm text-gray-500 truncate">يرجى اختيار ملف للتشغيل</p>
+                </div>
+            </div>
+
+            <!-- Audio Controls -->
+            <div class="flex flex-col items-center w-full md:w-2/3 gap-2">
+                <div class="flex items-center gap-6">
+                    <button id="playPauseBtn" class="bg-emerald-600 text-white w-12 h-12 rounded-full hover:bg-emerald-500 transition flex items-center justify-center">
+                        <i class="fas fa-play" id="playIcon"></i>
+                    </button>
+                    <audio id="audioElement" class="hidden"></audio>
+                    <div class="flex items-center gap-3 w-full max-w-md">
+                        <span id="currentTime" class="text-xs text-gray-500">0:00</span>
+                        <input type="range" id="seekSlider" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                        <span id="durationTime" class="text-xs text-gray-500">0:00</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <i class="fas fa-volume-up text-gray-400"></i>
+                        <input type="range" id="volumeSlider" value="1" max="1" step="0.1" class="w-20 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const API_SEARCH_URL = 'https://archive.org/advancedsearch.php';
+        const API_METADATA_URL = 'https://archive.org/metadata/';
+        const ITEMS_PER_PAGE = 20;
+        const ISLAMIC_KEYWORDS = '("إسلامي" OR "قرآن" OR "حديث" OR "Islamic" OR "صوتيات إسلامية")';
+
+        // State
+        let currentQuery = '';
+        let currentPage = 1;
+        let currentResults = [];
+        let favorites = JSON.parse(localStorage.getItem('islamic_audio_favs') || '[]');
+
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const favsBtn = document.getElementById('favsBtn');
+        const keywordsQuickBtn = document.getElementById('keywordsQuickBtn');
+        const searchStats = document.getElementById('searchStats');
+        const resultsCount = document.getElementById('resultsCount');
+        const resultsGrid = document.getElementById('resultsGrid');
+        const pagination = document.getElementById('pagination');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const pageIndicator = document.getElementById('pageIndicator');
+        
+        const audioElement = document.getElementById('audioElement');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const seekSlider = document.getElementById('seekSlider');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationTimeSpan = document.getElementById('durationTime');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        // Keywords Modal Elements
+        const keywordsModal = document.getElementById('keywordsModal');
+        const closeKeywordsBtn = document.getElementById('closeKeywordsBtn');
+        const modalAuthorsList = document.getElementById('modalAuthorsList');
+        const modalTitlesList = document.getElementById('modalTitlesList');
+
+        // Search Implementation
+        async function performSearch(query, page = 1) {
+            currentQuery = query;
+            currentPage = page;
+            
+            resultsGrid.innerHTML = '<div class="col-span-full text-center py-20"><i class="fas fa-spinner fa-spin text-4xl text-emerald-600"></i><p class="mt-4 text-gray-600">جاري البحث...</p></div>';
+            pagination.classList.add('hidden');
+            searchStats.classList.add('hidden');
+
+            const fullQuery = `format:MP3 AND (${ISLAMIC_KEYWORDS}) AND (title:(${query}) OR creator:(${query}))`;
+            const url = `${API_SEARCH_URL}?q=${encodeURIComponent(fullQuery)}&fl=identifier,title,creator&output=json&rows=${ITEMS_PER_PAGE}&start=${(page - 1) * ITEMS_PER_PAGE}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const docs = data.response.docs;
+                const total = data.response.numFound;
+
+                if (docs.length === 0) {
+                    resultsGrid.innerHTML = '<div class="col-span-full text-center py-20"><i class="fas fa-search text-5xl mb-4 block text-gray-300"></i><p class="text-xl text-gray-500">لم يتم العثور على نتائج مطابقة</p></div>';
+                    searchStats.classList.add('hidden');
+                    return;
+                }
+
+                currentResults = docs;
+                renderResults(docs);
+                
+                searchStats.classList.remove('hidden');
+                resultsCount.textContent = total.toLocaleString();
+
+                if (total > ITEMS_PER_PAGE) {
+                    pagination.classList.remove('hidden');
+                    pageIndicator.textContent = `صفحة ${page} من ${Math.ceil(total / ITEMS_PER_PAGE)}`;
+                    prevPageBtn.disabled = page === 1;
+                    nextPageBtn.disabled = page * ITEMS_PER_PAGE >= total;
+                } else {
+                    pagination.classList.add('hidden');
+                }
+
+            } catch (error) {
+                console.error('Search Error:', error);
+                resultsGrid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500">حدث خطأ أثناء جلب البيانات. يرجى المحاولة مرة أخرى.</div>';
+            }
+        }
+
+        async function renderResults(docs) {
+            resultsGrid.innerHTML = '';
+            for (const item of docs) {
+                renderCard(item);
+            }
+        }
+
+        function renderCard(item) {
+            const card = document.createElement('div');
+            card.className = 'result-card bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between';
+            
+            const title = item.title || 'بدون عنوان';
+            const creator = item.creator || 'غير معروف';
+            const id = item.identifier;
+
+            card.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-emerald-100 text-emerald-700 p-2 rounded-lg">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-1 truncate" title="${title}">${title}</h3>
+                    <p class="text-sm text-gray-500 mb-4 truncate">${creator}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="playTrack('${id}', '${title.replace(/'/g, "\\'")}', '${creator.replace(/'/g, "\\'")}')" 
+                        class="col-span-2 bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700 transition flex items-center justify-center gap-2 font-semibold">
+                        <i class="fas fa-play text-xs"></i> تشغيل المجموعة
+                    </button>
+                    <button onclick="togglePlaylist('${id}', this)" class="col-span-2 bg-emerald-100 text-emerald-700 py-2 rounded-lg hover:bg-emerald-200 transition text-sm flex items-center justify-center gap-1 font-medium">
+                        <i class="fas fa-list"></i> عرض قائمة المقاطع
+                    </button>
+                </div>
+                <div id="playlist-${id}" class="hidden mt-4 border-t pt-3 overflow-visible">
+                    <!-- Playlist files will be injected here -->
+                </div>
+
+                <div id="playlist-${id}" class="hidden mt-4 border-t pt-3 overflow-visible">
+                    <!-- Playlist files will be injected here -->
+                </div>
+            `;
+            resultsGrid.appendChild(card);
+        }
+        
+        // Audio Player Logic
+        async function playTrack(id, title, artist, fileName = null) {
+            try {
+                let fileUrl = '';
+                if (fileName) {
+                    fileUrl = `https://archive.org/download/${id}/${fileName}`;
+                } else {
+                    const response = await fetch(`${API_METADATA_URL}${id}`);
+                    const data = await response.json();
+                    const mp3Files = data.files.filter(f => f.name.toLowerCase().endsWith('.mp3'));
+                    if (mp3Files.length === 0) {
+                        alert('هذا العنصر لا يحتوي على ملفات MP3 متوافقة.');
+                        return;
+                    }
+                    fileUrl = `https://archive.org/download/${id}/${mp3Files[0].name}`;
+                }
+                
+                audioElement.src = fileUrl;
+                audioElement.play();
+                
+                currentTitle.textContent = fileName ? fileName.replace('.mp3', '') : title;
+                currentArtist.textContent = artist;
+                playIcon.className = 'fas fa-pause';
+                
+            } catch (error) {
+                console.error('Playback Error:', error);
+                alert('حدث خطأ أثناء محاولة تشغيل الملف.');
+            }
+        }
+
+        async function togglePlaylist(id, btn) {
+            const playlistDiv = document.getElementById(`playlist-${id}`);
+            if (!playlistDiv.classList.contains('hidden')) {
+                playlistDiv.classList.add('hidden');
+                btn.innerHTML = '<i class="fas fa-list"></i> عرض قائمة المقاطع';
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+            
+            try {
+                const response = await fetch(`${API_METADATA_URL}${id}`);
+                const data = await response.json();
+                const mp3Files = data.files.filter(f => f.name.toLowerCase().endsWith('.mp3'));
+                const collectionTitle = data.title || 'مجموعة';
+                const collectionCreator = data.creator || 'غير معروف';
+
+                if (mp3Files.length === 0) {
+                    playlistDiv.innerHTML = '<p class="text-xs text-gray-500 text-center">لا توجد ملفات MP3 في هذه المجموعة</p>';
+                } else {
+                    playlistDiv.innerHTML = `<div class="flex flex-col gap-2 max-h-80 overflow-y-auto pr-2">
+                        ${mp3Files.map(file => {
+                            const fileName = file.name;
+                            const trackTitle = fileName.replace('.mp3', '');
+                            const isFav = favorites.some(f => f.id === id && f.fileName === fileName);
+                            return `
+                            <div class="flex items-center justify-between p-2 hover:bg-emerald-50 rounded border-b border-gray-50 last:border-0 text-xs">
+                                <div class="flex items-center gap-2 truncate cursor-pointer flex-1" onclick="playTrack('${id}', '${trackTitle.replace(/'/g, "\\'")}', '${collectionCreator.replace(/'/g, "\\'")}', '${fileName.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-play text-emerald-600"></i>
+                                    <span class="truncate" title="${fileName}">${trackTitle}</span>
+                                </div>
+                                <div class="flex items-center gap-2 ml-2">
+                                    <button onclick="toggleFavorite('${id}', '${fileName.replace(/'/g, "\\'")}', '${trackTitle.replace(/'/g, "\\'")}', '${collectionCreator.replace(/'/g, "\\'")}')" 
+                                        class="text-gray-300 hover:text-red-500 transition">
+                                        <i class="fas fa-heart ${isFav ? 'text-red-500' : ''}"></i>
+                                    </button>
+                                    <button onclick="downloadTrack('${id}', '${fileName.replace(/'/g, "\\'")}')" class="text-gray-400 hover:text-emerald-600 transition">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button onclick="shareTrack('${id}', '${fileName.replace(/'/g, "\\'")}', '${trackTitle.replace(/'/g, "\\'")}')" class="text-gray-400 hover:text-emerald-600 transition">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>`;
+                }
+                playlistDiv.classList.remove('hidden');
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> إخفاء القائمة';
+            } catch (error) {
+                alert('خطأ في جلب قائمة التشغيل');
+                btn.innerHTML = '<i class="fas fa-list"></i> عرض قائمة المقاطع';
+            }
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audioElement.paused) {
+                audioElement.play();
+                playIcon.className = 'fas fa-pause';
+            } else {
+                audioElement.pause();
+                playIcon.className = 'fas fa-play';
+            }
+        });
+
+        audioElement.addEventListener('timeupdate', () => {
+            const current = audioElement.currentTime;
+            const duration = audioElement.duration;
+            if (duration) {
+                seekSlider.value = (current / duration) * 100;
+                currentTimeSpan.textContent = formatTime(current);
+                durationTimeSpan.textContent = formatTime(duration);
+            }
+        });
+
+        seekSlider.addEventListener('input', () => {
+            const time = (seekSlider.value / 100) * audioElement.duration;
+            audioElement.currentTime = time;
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            audioElement.volume = volumeSlider.value;
+        });
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // Keywords Modal Logic
+        function openKeywordsModal() {
+            const authors = JSON.parse(localStorage.getItem('islamic_keywords_authors') || '[]');
+            const titles = JSON.parse(localStorage.getItem('islamic_keywords_titles') || '[]');
+
+            modalAuthorsList.innerHTML = authors.length ? '' : '<p class="text-gray-400 text-xs">لا توجد كلمات</p>';
+            authors.forEach(author => {
+                const tag = document.createElement('button');
+                tag.className = 'bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs hover:bg-emerald-200 transition border border-emerald-200';
+                tag.textContent = author;
+                tag.onclick = () => selectKeyword(author);
+                modalAuthorsList.appendChild(tag);
+            });
+
+            modalTitlesList.innerHTML = titles.length ? '' : '<p class="text-gray-400 text-xs">لا توجد كلمات</p>';
+            titles.forEach(title => {
+                const tag = document.createElement('button');
+                tag.className = 'bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs hover:bg-emerald-200 transition border border-emerald-200';
+                tag.textContent = title;
+                tag.onclick = () => selectKeyword(title);
+                modalTitlesList.appendChild(tag);
+            });
+
+            keywordsModal.classList.remove('hidden');
+        }
+
+        function selectKeyword(word) {
+            const currentVal = searchInput.value.trim();
+            searchInput.value = currentVal ? `${currentVal} ${word}` : word;
+            keywordsModal.classList.add('hidden');
+            performSearch(searchInput.value);
+        }
+
+        // Event Listeners
+        searchBtn.addEventListener('click', () => performSearch(searchInput.value));
+        favsBtn.addEventListener('click', () => showFavorites());
+        keywordsQuickBtn.addEventListener('click', openKeywordsModal);
+        closeKeywordsBtn.addEventListener('click', () => keywordsModal.classList.add('hidden'));
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch(searchInput.value);
+        });
+        prevPageBtn.addEventListener('click', () => performSearch(currentQuery, currentPage - 1));
+        nextPageBtn.addEventListener('click', () => performSearch(currentQuery, currentPage + 1));
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل المستخدم - مكتبة الصوتيات الإسلامية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .guide-section {
+            transition: transform 0.2s;
+        }
+        .guide-section:hover {
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body class="pb-10">
+
+    <!-- Header -->
+    <header class="bg-emerald-700 text-white shadow-lg p-4 mb-8">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="hover:text-emerald-200 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة للرئيسية
+                </a>
+                <h1 class="text-2xl font-bold mr-4">دليل استخدام المكتبة</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 max-w-4xl">
+        
+        <!-- Welcome Message -->
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-emerald-100 mb-8 text-center">
+    
+    
+    <div class="bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6 rounded-3xl shadow-sm border border-emerald-200 text-center mb-8">
+
+    
+
+    <h4 class="text-xl font-bold text-emerald-800 mb-4">
+        إهداء وتقدير</h4>
+
+    <p class="text-gray-700 leading-8 text-base max-w-3xl mx-auto">
+        أهدي هذا العمل إلى
+        <strong class="text-emerald-700">
+            المشمولة بعفو الله ورحمته
+        </strong>
+        أمي المرحومة
+        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-lg font-semibold">
+            فطومة بنت عبد المالك
+        </span>
+        ، رحمها الله رحمة واسعة وأسكنها فسيح جناته.
+    </p>
+
+    <p class="text-gray-700 leading-8 text-base max-w-3xl mx-auto mt-4">
+        كما أهديه إلى كل من ساهم في
+        <strong class="text-emerald-700">
+            نشر الدروس والمحاضرات الإسلامية
+        </strong>
+        وإتاحتها عبر منصة
+
+        <a href="https://archive.org" target="_blank"
+           class="text-blue-700 font-semibold underline hover:text-blue-900">
+            Archive Internet
+        </a>
+
+        ، سائلين الله أن يجعل ذلك في ميزان حسناتهم.
+    </p>
+    <h4 class="text-2xl font-bold text-gray-800 mb-4">
+        دليل استخدام التطبيق الصوتي الإسلامي
+    </h4>
+
+    <p class="text-gray-600 leading-8 text-lg">
+        هذا الدليل يساعدك على 
+        <strong class="text-emerald-700">
+            الاستفادة القصوى
+        </strong>
+        من جميع ميزات التطبيق للبحث عن 
+        <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg font-semibold">
+            المحتوى الإسلامي الصوتي
+        </span>
+        والاستماع إليه بسهولة.
+    </p>
+
+    <p class="text-gray-600 leading-8 text-lg mt-5">
+        ويُعدّ هذا التطبيق 
+        <strong class="text-blue-700">
+            محرك بحث صوتي
+        </strong>
+        داخل الموقع الشهير
+
+        <a href="https://archive.org" target="_blank"
+           class="text-blue-600 hover:text-blue-800 font-bold underline">
+            Archive.org
+        </a>
+
+        الذي يحتوي على ملايين الملفات الصوتية.
+    </p>
+
+    <p class="text-gray-600 leading-8 text-lg mt-5">
+        يعتمد هذا المحرك على خاصيتي
+
+        <span class="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-mono">
+            API_SEARCH_URL
+        </span>
+
+        و
+
+        <span class="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm font-mono">
+            API_METADATA_URL
+        </span>
+
+        للبحث عن المجموعات الصوتية بصيغة
+        <strong class="text-orange-600">
+            MP3
+        </strong>
+
+        ثم جلبها وعرضها على شكل
+        <span class="text-emerald-700 font-bold">
+            قوائم تشغيل منظمة
+        </span>
+        وسهلة الاستخدام.
+    </p>
+
+</div>
+
+        <div class="space-y-6">
+            
+            <!-- Section 1: Searching -->
+            <section class="guide-section bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-600">
+                <div class="flex items-center gap-3 mb-4 text-emerald-700">
+                    <i class="fas fa-search text-xl"></i>
+                    <h3 class="text-xl font-bold">كيفية البحث عن المحتوى</h3>
+                </div>
+                <div class="text-gray-600 space-y-3 leading-relaxed">
+                    <p>يمكنك البحث عن التلاوات، الأحاديث، أو الدروس الإسلامية بطريقتين:</p>
+                    <ul class="list-disc list-inside space-y-2 mr-4">
+                        <li><strong>البحث الحر:</strong> اكتب اسم القارئ أو عنوان الدرس مباشرة في مربع البحث واضغط Enter.</li>
+                        <li><strong>البحث الذكي:</strong> اضغط على زر "المصباح" (💡) لاختيار كلمات مفتاحية جاهزة قمت بتدبيرها مسبقاً لإدراجها في البحث.</li>
+                    </ul>
+                    <p class="text-sm bg-emerald-50 p-2 rounded border border-emerald-100">
+                        <i class="fas fa-shield-alt ml-1"></i> <strong>ملاحظة:</strong> يقوم التطبيق تلقائياً بتصفية النتائج لضمان ظهور ملفات <strong>MP3</strong> فقط ومن <strong>مجموعات إسلامية</strong>.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 2: Audio Player -->
+            <section class="guide-section bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-600">
+                <div class="flex items-center gap-3 mb-4 text-emerald-700">
+                    <i class="fas fa-play-circle text-xl"></i>
+                    <h3 class="text-xl font-bold">تشغيل الملفات الصوتية</h3>
+                </div>
+                <div class="text-gray-600 space-y-3 leading-relaxed">
+                    <p>عند العثور على مجموعة، لديك خياران للتشغيل:</p>
+                    <ul class="list-disc list-inside space-y-2 mr-4">
+                        <li><strong>تشغيل المجموعة:</strong> يقوم بتشغيل أول ملف MP3 متوفر في تلك المجموعة.</li>
+                        <li><strong>قائمة المقاطع:</strong> اضغط على "عرض قائمة المقاطع" لتظهر لك جميع الملفات داخل المجموعة، ويمكنك اختيار مقطع محدد لتشغيله.</li>
+                    </ul>
+                    <p>سيظهر المشغل في أسفل الشاشة بشكل ثابت، حيث يمكنك التحكم في: <strong>التشغيل/الإيقاف، تقديم/تأخير الوقت، والتحكم في مستوى الصوت.</strong></p>
+                </div>
+            </section>
+
+            <!-- Section 3: Favorites -->
+            <section class="guide-section bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-600">
+                <div class="flex items-center gap-3 mb-4 text-emerald-700">
+                    <i class="fas fa-heart text-xl"></i>
+                    <h3 class="text-xl font-bold">إدارة المفضلة</h3>
+                </div>
+                <div class="text-gray-600 space-y-3 leading-relaxed">
+                    <p>يمكنك حفظ المقاطع التي تعجبك للرجوع إليها لاحقاً دون الحاجة للبحث عنها مجدداً:</p>
+                    <ul class="list-disc list-inside space-y-2 mr-4">
+                        <li>افتح "قائمة المقاطع" داخل أي مجموعة.</li>
+                        <li>اضغط على أيقونة <strong>القلب ❤️</strong> بجانب المقطع المفضل.</li>
+                        <li>للوصول إلى جميع مقاطعك المفضلة، اضغط على زر <strong>القلب</strong> الموجود في أعلى الصفحة الرئيسية.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 4: Downloads and Sharing -->
+            <section class="guide-section bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-600">
+                <div class="flex items-center gap-3 mb-4 text-emerald-700">
+                    <i class="fas fa-download text-xl"></i>
+                    <h3 class="text-xl font-bold">التحميل والمشاركة</h3>
+                </div>
+                <div class="text-gray-600 space-y-3 leading-relaxed">
+                    <p>كل مقطع صوتي يوفر خيارات سريعة:</p>
+                    <ul class="list-disc list-inside space-y-2 mr-4">
+                        <li><strong>تحميل:</strong> يفتح لك رابط التحميل المباشر لملف الـ MP3.</li>
+                        <li><strong>مشاركة:</strong> يتيح لك إرسال رابط المقطع لأصدقائك عبر تطبيقات التواصل أو نسخ الرابط.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 5: Keywords Management -->
+            <section class="guide-section bg-white p-6 rounded-2xl shadow-sm border-r-4 border-emerald-600">
+                <div class="flex items-center gap-3 mb-4 text-emerald-700">
+                    <i class="fas fa-tags text-xl"></i>
+                    <h3 class="text-xl font-bold">تدبير الكلمات المفتاحية</h3>
+                </div>
+                <div class="text-gray-600 space-y-3 leading-relaxed">
+                    <p>يمكنك تخصيص كلمات بحث سريعة لتسهيل الوصول للمحتوى المتكرر:</p>
+                    <ul class="list-disc list-inside space-y-2 mr-4">
+                        <li>اضغط على زر <strong>الوسوم 🏷️</strong> في الصفحة الرئيسية للدخول لصفحة الإدارة.</li>
+                        <li>أضف أسماء القراء الذين تتابعهم في قائمة "المؤلفين".</li>
+                        <li>أضف مواضيع تهمك (مثل: تجويد، تفسير) في قائمة "العناوين".</li>
+                        <li>يمكنك تعديل أو حذف أي كلمة في أي وقت.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            &copy; 2026 مكتبة الصوتيات الإسلامية - جميع الحقوق محفوظة
+        </footer>
+    </main>
+
+</body>
+</html>

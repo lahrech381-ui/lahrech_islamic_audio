@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lahrech-player.example.com/sitemap.xml
